@@ -19,8 +19,8 @@ public class RestAppController {
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(authService.register(request));
     }
-    @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request){
-        return ResponseEntity.ok(authService.authenticate(request));
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request){
+        return ResponseEntity.ok(authService.login(request));
     }
 }
