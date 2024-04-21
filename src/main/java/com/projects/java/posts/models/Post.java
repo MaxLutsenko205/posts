@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Setter
 @Getter
@@ -17,5 +20,7 @@ public class Post {
     private Long postId;
     private String title;
     private String content;
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User user;
 }
