@@ -2,13 +2,12 @@ package com.projects.java.posts.services;
 
 import com.projects.java.posts.controllers.NewPostRequest;
 import com.projects.java.posts.models.Post;
-import com.projects.java.posts.repositories.PostRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 public interface PostService {
-    void createPost(NewPostRequest request);
-    void updatePost(String updatedContent, String userEmail);
-    void deletePost();
-    Post readPost(String userEmail);
+    void createPost(NewPostRequest request, String userEmail);
+    void updatePost(NewPostRequest updatedContent, Long postId);
+    boolean updatePost(NewPostRequest updatedContent, Long postId, String userEmail);
+    void deletePost(Long postId);
+    boolean deletePost(Long postId, String userEmail);
+    Post readPost(Long postId);
 }

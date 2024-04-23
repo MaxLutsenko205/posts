@@ -2,10 +2,6 @@ package com.projects.java.posts.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Setter
@@ -23,4 +19,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User user;
+
+    public void setTitleAndContent(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

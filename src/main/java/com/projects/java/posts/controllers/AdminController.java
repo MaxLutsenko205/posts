@@ -1,24 +1,44 @@
 package com.projects.java.posts.controllers;
 
+import com.projects.java.posts.models.Post;
 import com.projects.java.posts.services.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/admin")
-@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("api/posts")
 @RequiredArgsConstructor
 public class AdminController {
 
     private final PostService postService;
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('admin:create')")
     public void newPost(@RequestBody NewPostRequest request){
-        postService.createPost(request);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        postService.createPost(request, userEmail);
     }
 
-    @GetMapping
-    @PreAuthorize("hasAuthority('admin:read')")
-    public String get(){return "admin:GET";}
+    @GetMapping("/{postId}")
+    public ResponseEntity<Post> getPost(@PathVariable Long postId){
+        return ResponseEntity.ok(postService.readPost(postId));
+    }
+
+    @PutMapping("/{postId}")
+    public ResponseEntity<?> updateUserPost(@PathVariable Long postId, @RequestBody NewPostRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        return ResponseEntity.ok(postService.updatePost(request, postId, userEmail));
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> deletePost(@PathVariable Long postId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        return ResponseEntity.ok(postService.deletePost(postId, userEmail));
+    }
+
+
 }
