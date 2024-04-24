@@ -26,16 +26,8 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public void updatePost(NewPostRequest updatedContent, Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(()->new EntityNotFoundException("Post not found"));
-        post.setTitle(updatedContent.getTitle());
-        post.setContent(updatedContent.getContent());
-        postRepository.save(post);
-    }
-
-    @Override
     public boolean updatePost(NewPostRequest updatedContent, Long postId, String userEmail) {
-        if (isAuthor(userEmail, postId)){
+        if (hasAccess(userEmail, postId)){
             Post post = postRepository.findById(postId).orElseThrow(()->new EntityNotFoundException("Post not found"));
             post.setTitle(updatedContent.getTitle());
             post.setContent(updatedContent.getContent());
@@ -46,13 +38,8 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public void deletePost(Long postId) {
-        postRepository.deleteById(postId);
-    }
-
-    @Override
     public boolean deletePost(Long postId, String userEmail) {
-        if (isAuthor(userEmail, postId)){
+        if (hasAccess(userEmail, postId)){
             postRepository.deleteById(postId);
             return true;
         }
@@ -64,7 +51,7 @@ public class PostServiceImpl implements PostService{
         return postRepository.findById(postId).orElseThrow(()-> new EntityNotFoundException("Post not found"));
     }
 
-    public boolean isAuthor(String userEmail, Long postId){
+    public boolean hasAccess(String userEmail, Long postId){
         User user = userRepository.findByEmail(userEmail).orElseThrow();
         Post post = postRepository.findById(postId).orElseThrow();
         if (user.getRole()==Role.ADMIN){

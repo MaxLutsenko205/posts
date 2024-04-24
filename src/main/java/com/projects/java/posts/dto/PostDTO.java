@@ -1,15 +1,11 @@
 package com.projects.java.posts.dto;
+import lombok.*;
 
-import com.projects.java.posts.models.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class PostDTO {
     private Long postId;
     private String title;
