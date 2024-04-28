@@ -1,6 +1,8 @@
 package com.projects.java.posts.services;
 
 import com.projects.java.posts.controllers.NewPostRequest;
+import com.projects.java.posts.dto.PostDTO;
+import com.projects.java.posts.mapping.PostMapper;
 import com.projects.java.posts.models.Post;
 import com.projects.java.posts.models.Role;
 import com.projects.java.posts.models.User;
@@ -8,7 +10,13 @@ import com.projects.java.posts.repositories.PostRepository;
 import com.projects.java.posts.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService{
@@ -51,6 +59,25 @@ public class PostServiceImpl implements PostService{
         return postRepository.findById(postId).orElseThrow(()-> new EntityNotFoundException("Post not found"));
     }
 
+    @Override
+    public Page<Post> getPage(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return postRepository.findAll(pageRequest);
+    }
+
+    @Override
+    public Page<Post> getSortedPage(int page, int size, String direction, String sortBy){
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        return postRepository.findAll(pageRequest);
+    }
+
+//    @Override
+//    public Page<Post> getPostByTitle(String title){
+//        List<Post> posts = postRepository.findAllByTitleContaining(title);
+//
+//        return ;
+//    }
     public boolean hasAccess(String userEmail, Long postId){
         User user = userRepository.findByEmail(userEmail).orElseThrow();
         Post post = postRepository.findById(postId).orElseThrow();

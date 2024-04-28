@@ -25,19 +25,17 @@ import java.util.stream.IntStream;
 public class SampleDataLoader implements CommandLineRunner {
 
     private final Logger logger = LoggerFactory.getLogger(SampleDataLoader.class);
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
     private final AuthService authService;
-    private final FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-GB"),
-            new RandomService());
-    private final Faker faker = new Faker();
+//    private final FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-GB"),
+//            new RandomService());
+//    private final Faker faker = new Faker();
     @Override
     public void run(String... args) throws Exception {
         AuthenticationRequest admin = AuthenticationRequest.builder()
                 .email("admin@gmail.com")
                 .password("000000")
                 .build();
-        logger.info("Admin token: "+authService.login(admin).getToken());
+        System.out.println("Admin token: "+authService.login(admin).getToken());
         logger.info("Loading posts samples...");
 /*
         Creating posts with random content
