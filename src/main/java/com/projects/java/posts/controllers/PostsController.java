@@ -71,8 +71,22 @@ public class PostsController {
     }
 
 //    searching
-//    @GetMapping("/title")
-//    public Page<Post> getPostByTitle(@RequestParam String title){
-//        return postService.getPostByTitle(title);
-//    }
+    @GetMapping("/title")
+    public Page<Post> getPostByTitle(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size,
+                                     @RequestParam String title){
+        return postService.getPostByTitle(page, size, title);
+    }
+    @GetMapping("/content")
+    public Page<Post> getPostByContent(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size,
+                                     @RequestParam String content){
+        return postService.getPostByContent(page, size, content);
+    }
+    @GetMapping("/search")
+    public Page<Post> getPostByTitleOrContent(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "10") int size,
+                                              @RequestParam String request){
+        return postService.getPostByTitleOrContent(page, size, request);
+    }
 }

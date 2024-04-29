@@ -11,6 +11,7 @@ import com.projects.java.posts.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -72,12 +73,34 @@ public class PostServiceImpl implements PostService{
         return postRepository.findAll(pageRequest);
     }
 
-//    @Override
-//    public Page<Post> getPostByTitle(String title){
-//        List<Post> posts = postRepository.findAllByTitleContaining(title);
-//
-//        return ;
-//    }
+    @Override
+    public Page<Post> getPostByTitle(int page, int size, String title){
+        List<Post> posts = postRepository.findAllByTitleContaining(title);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        int start = Math.min(page * size, posts.size());
+        int end = Math.min(start + size, posts.size());
+        List<Post> currentContent = posts.subList(start, end);
+        return new PageImpl<>(currentContent, pageRequest, posts.size());
+    }
+
+    @Override
+    public Page<Post> getPostByContent(int page, int size, String content) {
+        List<Post> posts = postRepository.findAllByContentContaining(content);
+        int start = Math.min(page * size, posts.size());
+        int end = Math.min(start + size, posts.size());
+        List<Post> currentContent = posts.subList(start, end);
+        return new PageImpl<>(currentContent, PageRequest.of(page, size), posts.size());
+    }
+
+    @Override
+    public Page<Post> getPostByTitleOrContent(int page, int size, String request) {
+        List<Post> posts = postRepository.findAllByTitleContainingOrContentContaining(request, request);
+        int start = Math.min(page * size, posts.size());
+        int end = Math.min(start + size, posts.size());
+        List<Post> currentContent = posts.subList(start, end);
+        return new PageImpl<>(currentContent, PageRequest.of(page, size), posts.size());
+    }
+
     public boolean hasAccess(String userEmail, Long postId){
         User user = userRepository.findByEmail(userEmail).orElseThrow();
         Post post = postRepository.findById(postId).orElseThrow();

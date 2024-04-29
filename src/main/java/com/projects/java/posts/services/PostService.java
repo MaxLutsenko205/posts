@@ -12,5 +12,7 @@ public interface PostService {
     Post readPost(Long postId);
     Page<Post> getPage(int page, int size);
     Page<Post> getSortedPage(int page, int size, String direction, String sortBy);
-//    Page<Post> getPostByTitle(String title);
+    Page<Post> getPostByTitle(int page, int size, String title);
+    Page<Post> getPostByContent(int page, int size, String content);
+    Page<Post> getPostByTitleOrContent(int page, int size, String request);
 }
